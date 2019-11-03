@@ -6,11 +6,14 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.util.Log;
 
 import com.estimote.coresdk.observation.region.beacon.BeaconRegion;
 import com.estimote.coresdk.recognition.packets.Beacon;
 import com.estimote.coresdk.service.BeaconManager;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
@@ -30,9 +33,6 @@ public class Appstart extends Application {
                         "monitored region",
                         UUID.fromString("aaaac88b-be75-6698-da48-6866a36ec78e"),
                         1, 1));
-
-
-
             }
         });
 
@@ -40,15 +40,24 @@ public class Appstart extends Application {
         beaconManager.setMonitoringListener(new BeaconManager.BeaconMonitoringListener() {
             @Override
             public void onEnteredRegion(BeaconRegion beaconRegion, List<Beacon> beacons) {
+                Log.i("TAGi", "MAJOR ID ..." + beaconRegion.getMajor()+"\n"
+
+                        + "REGION ID ... " + beaconRegion.getIdentifier()+"\n"
+                        + "MINOR ID ... " + beaconRegion.getMinor()+"\n"
+                        + "UUID ..." + beaconRegion.getProximityUUID());
                 Intent intent = new Intent(getApplicationContext(), SplashActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 intent.putExtra("executeType", "beacon");
+
                 getApplicationContext().startActivity(intent);
             }
 
             @Override
             public void onExitedRegion(BeaconRegion beaconRegion) {
 
+
+
+                showNotification("Welcome to Store","blah blah");
             }
         });
     }
